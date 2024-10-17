@@ -42,4 +42,14 @@ class ConfigurationSshTest < ActiveSupport::TestCase
     config = Kamal::Configuration.new(@deploy.tap { |c| c.merge!(ssh: { "config" => false }) })
     assert_equal false, config.ssh.options[:config]
   end
+
+  test "ssh options with path to an ssh_config-file" do
+    config = Kamal::Configuration.new(@deploy.tap { |c| c.merge!(ssh: { "config" => "config/ssh_config" }) })
+    assert_equal "config/ssh_config", config.ssh.options[:config]
+  end
+
+  test "ssh options with an array of ssh_config-files" do
+    config = Kamal::Configuration.new(@deploy.tap { |c| c.merge!(ssh: { "config" => %w[ ssh_config_a ssh_config_b ] }) })
+    assert_equal %w[ ssh_config_a ssh_config_b ], config.ssh.options[:config]
+  end
 end
